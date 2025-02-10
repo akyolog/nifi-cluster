@@ -119,7 +119,27 @@ Use the 'oc' command line interface:
   PS> oc login -u developer https://api.crc.testing:6443
 ```
 
-## Comparision of Nifi Operators 
+
+## Nifi Operators 
 
 ...
+
+### Stackable
+
+...
+
+
+
+### Nifikop
+
+...
+
+## Comparision of operators
+
+Comparision criterieas
+
+* Support for Apache Nifi 2.x 
+* Performance 
+* Installation comfortable & reliable
+* Configuration comfortable & reliable
 
