@@ -4,9 +4,7 @@
 
 ## Introduction
 
-
 ## Installtion requirements
-
 
 Local Installation of Openshift:
 https://developers.redhat.com/products/openshift-local/getting-started
@@ -14,15 +12,14 @@ https://developers.redhat.com/products/openshift-local/getting-started
 Video Tutorial:
 https://youtu.be/yp8LXEKlGSQ
 
-**Steps** 
+**Steps**
 
+- Please install / activate HyperV in Windows System.
+- Download CRC from RedHat.
+- Download the pull scret file and copy to user folder.
+- Install CRC on Windows.
 
-* Please install / activate HyperV in Windows System.
-* Download CRC from RedHat.
-* Download the pull scret file and copy to user folder.
-* Install CRC on Windows.
-
-* Setup the CRC 
+- Setup the CRC
 
 ```
 PS C:\Users\oguzhan.akyol> crc setup
@@ -55,7 +52,7 @@ INFO Checking SSH port availability
 Your system is correctly setup for using CRC. Use 'crc start' to start the instance
 ```
 
-* Start the CRC 
+- Start the CRC
 
 ```
 PS C:\Users\oguzhan.akyol> crc start -p .\pull-secret.txt
@@ -108,19 +105,18 @@ The server is accessible via web console at:
 
 Log in as administrator:
   Username: kubeadmin
-  Password: 
+  Password:
 
 Log in as user:
   Username: developer
-  Password: 
+  Password:
 
 Use the 'oc' command line interface:
   PS> & crc oc-env | Invoke-Expression
   PS> oc login -u developer https://api.crc.testing:6443
 ```
 
-
-## Nifi Operators 
+## Nifi Operators
 
 ...
 
@@ -128,9 +124,9 @@ Use the 'oc' command line interface:
 
 ...
 
-
-
 ### Nifikop
+
+@syedumerahmedcode is analyzing the nifikop part of this analysis.
 
 ...
 
@@ -138,8 +134,7 @@ Use the 'oc' command line interface:
 
 Comparision criterieas
 
-* Support for Apache Nifi 2.x 
-* Performance 
-* Installation comfortable & reliable
-* Configuration comfortable & reliable
-
+- Support for Apache Nifi 2.x
+- Performance
+- Installation comfortable & reliable
+- Configuration comfortable & reliable
