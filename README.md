@@ -133,6 +133,8 @@ This guide descripts the installtion steps on windows.
 #### Preconditions
   - Install Helm:
   https://docs.openshift.com/container-platform/4.10/applications/working_with_helm_charts/installing-helm.html#on-windows-10
+
+  Please note that even when you follow all the instrcutions in the section above, `helm` command might still not work on command line. In that case, please rename the package name from `helm-windows-amd64` to `helm` and now, helm command should work.
   
   - Install Kubectl:
 
