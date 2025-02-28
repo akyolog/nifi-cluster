@@ -132,7 +132,61 @@ Use the 'oc' command line interface:
 
 ### Nifikop
 
-...
+This guide descripts the installtion steps on windows.
+
+#### Preconditions
+  - Install Helm:
+  https://docs.openshift.com/container-platform/4.10/applications/working_with_helm_charts/installing-helm.html#on-windows-10
+  
+  - Install Kubectl:
+
+
+  - Login openshift as Administrator:
+```
+  & crc oc-env | Invoke-Expression
+  oc login -u kubeadmin -p cktiF-....-txr9u https://api.crc.testing:6443
+```
+
+  - Get Uid from openshift project
+
+```
+  kubectl get namespace nifi -o=jsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.supplemental-groups}'
+```
+  The result will be 1000650000/10000. The first part before ist he uid and second is the group id for my project.
+
+#### Installation 
+
+##### Install cert manager
+
+```
+# Install CustomResourceDefinitions first
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.7.2/cert-manager.crds.yaml
+
+# Add the jetstack helm repo
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+# You have to create the namespace before executing following command
+helm install cert-manager --namespace nifi-cluster-demo --version v1.7.2 jetstack/cert-manager
+
+```
+
+##### Install State management / zookeeper
+
+```
+helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000
+```
+
+##### Deploy nifikop
+
+```
+helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=nifi-cluster-demo --version 1.12.0 --set image.tag=v1.12.0-release --set resources.requests.memory=10Mi --set resources.requests.cpu=10m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set namespaces='{"nifi-cluster-demo"}' --set runAsUser=1000650000
+```
+
+#### Deploy Nifi Cluster
+
+//TODO...
+
 
 ## Comparision of operators
 
