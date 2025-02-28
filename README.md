@@ -240,6 +240,56 @@ reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 ```
 
+###### Installing zookeeper
+
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#installing-zookeeper
+
+```
+helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --namespace=zookeeper --set resources.requests.memory=256Mi --set resources.requests.cpu=250m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --create-namespace
+```
+
+If everything goies well, one will see something similar to the following: 
+```
+PS C:\ImportantDownloads\codeprojects\nifi\nifi-cluster> helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --namespace=zookeeper --set resources.requests.memory=256Mi --set resources.requests.cpu=250m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --create-namespace
+Pulled: registry-1.docker.io/bitnamicharts/zookeeper:13.7.4
+Digest: sha256:7b6aef19b1af10de823c3c0ca2ff0465fcc5db5c5e2c15b2ca1a207783688f99
+NAME: zookeeper
+LAST DEPLOYED: Fri Feb 28 16:58:30 2025
+NAMESPACE: zookeeper
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: zookeeper
+CHART VERSION: 13.7.4
+APP VERSION: 3.9.3
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
+
+    zookeeper.zookeeper.svc.cluster.local
+
+To connect to your ZooKeeper server run the following commands:
+
+    export POD_NAME=$(kubectl get pods --namespace zookeeper -l "app.kubernetes.io/name=zookeeper,app.kubernetes.io/instance=zookeeper,app.kubernetes.io/component=zookeeper" -o jsonpath="{.items[0].metadata.name}")
+    kubectl exec -it $POD_NAME -- zkCli.sh
+
+To connect to your ZooKeeper server from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace zookeeper svc/zookeeper 2181:2181 &
+    zkCli.sh 127.0.0.1:2181
+
+WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
+  - tls.resources
++info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+```
+
+
+
+
 
 ###### Enabling Kubernetes State Management
 
