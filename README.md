@@ -137,7 +137,19 @@ This guide descripts the installtion steps on windows.
   Please note that even when you follow all the instrcutions in the section above, `helm` command might still not work on command line. In that case, please rename the package name from `helm-windows-amd64` to `helm` and now, helm command should work.
   
   - Install Kubectl:
+  Kubectl can be imnstalled via the following link: 
+  https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-kubectl-binary-on-windows-via-direct-download-or-curl
 
+  Please be aware that you download the correct package for you windows. After downloading it, please make sure to add it in your environment variables(similar to how it is was done for helm).
+
+  Afterwards, please restart the cmd and run: `kubectl version --client`. If everything works fine, one should see a result similar to:
+  ```
+  C:\Users\syed-umer.ahmed>kubectl version --client
+  Client Version: v1.32.2
+  Kustomize Version: v5.5.0
+  ```
+
+  
 
   - Login openshift as Administrator:
 ```
