@@ -225,6 +225,22 @@ helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=n
 
 #### Deploy Nifi Cluster
 
+###### Create custom storage class
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#create-custom-storage-class
+
+```
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: examplestorageclass
+parameters:
+  type: pd-standard
+provisioner: kubernetes.io/gce-pd
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+```
+
+
 ###### Enabling Kubernetes State Management
 
 https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#enabling-kubernetes-state-management
