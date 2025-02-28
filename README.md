@@ -170,7 +170,8 @@ This guide descripts the installtion steps on windows.
 ```
   kubectl get namespace nifi -o=jsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.supplemental-groups}'
 ```
-  The result will be 1000650000/10000. The first part before ist he uid and second is the group id for my project.
+  The result will be 1000650000/10000. The first part before is the uid and second is the group id for my project.
+  Please note that if the command does not work, please adjust the namespace `nifi` to the corresponding namespace name in your project.
 
 #### Installation 
 
