@@ -148,7 +148,15 @@ This guide descripts the installtion steps on windows.
   Client Version: v1.32.2
   Kustomize Version: v5.5.0
   ```
+  - Add oc(Openshift client) to your local environemnt:
+  In order to add `oc` to your local environment, please run: `crc oc-env`. This will print out a command, something like: `@FOR /f "tokens=*" %i IN ('crc oc-env') DO @call %i` which one has to run on the command line. 
 
+  After this, if one enters `oc`, they will a list of command for open shift client.
+
+```
+  & crc oc-env | Invoke-Expression
+  oc login -u kubeadmin -p cktiF-....-txr9u https://api.crc.testing:6443
+```
   
 
   - Login openshift as Administrator:
