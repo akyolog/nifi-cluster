@@ -225,6 +225,51 @@ helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=n
 
 #### Deploy Nifi Cluster
 
+###### Enabling Kubernetes State Management
+
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#enabling-kubernetes-state-management
+
+When using native Kubernetes State Management from NiFi, you need to make sure that the ServiceAccount used by NiFi has the correct rights to manage the needed Kubernetes resources.
+
+Here, one can create `role` by going to (https://console-openshift-console.apps-crc.testing/k8s/ns/nifikop/rbac.authorization.k8s.io~v1~Role). Once here, one can go to _Create Role_ and paste the following in yaml file.
+```
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: simplenifi
+  namespace: nifi
+rules:
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["*"]
+```
+
+Also, one needs to create `RoleBindings` by going to (https://console-openshift-console.apps-crc.testing/k8s/ns/nifikop/rbac.authorization.k8s.io~v1~RoleBinding) and clicking _Create RoleBinding_. Once here, please fill in the appropriate values in the fields. Once created, one can verify the yaml file by chedcking that it contains the following snippet:
+
+```
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: simplenifi
+  namespace: nifi
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: nifi
+roleRef:
+  kind: Role
+  name: simplenifi
+  apiGroup: rbac.authorization.k8s.io
+```
+
+**NOTE**: In both parts above, please make sure to replace the namespace _nifi_ with the one on your local machine.
+
+
+
+
 //TODO...
 
 
