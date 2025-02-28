@@ -153,11 +153,6 @@ This guide descripts the installtion steps on windows.
 
   After this, if one enters `oc`, they will a list of command for open shift client.
 
-```
-  & crc oc-env | Invoke-Expression
-  oc login -u kubeadmin -p cktiF-....-txr9u https://api.crc.testing:6443
-```
-  
 
   - Login openshift as Administrator:
 ```
