@@ -168,23 +168,7 @@ This guide descripts the installtion steps on windows.
   The result will be 1000650000/10000. The first part before is the uid and second is the group id for my project.
   Please note that if the command does not work, please adjust the namespace `nifi` to the corresponding namespace name in your project.
 
-  - What to do in case Zookeeper is not running correctly?
-
-  In case Zookeeper is not running correctly, one needs to create a new StorageClass in Openshift Cluster. One can achieve that by going to `Openshift Cluster-->Storage-->StorageClasses-->Create storageClass`. Please select _Edit YAML_ option and paste the following: 
-
-```
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: standard
-provisioner: kubevirt.io.hostpath-provisioner
-parameters:
-  storagePool: local
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-
-```
-  After saving, this will create the required storage class.
+  
 
 #### Installation 
 
@@ -208,6 +192,24 @@ helm install cert-manager --namespace nifi-cluster-demo --version v1.7.2 jetstac
 ```
 helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000
 ```
+
+- What to do in case Zookeeper is not running correctly?
+
+  In case Zookeeper is not running correctly, one needs to create a new StorageClass in Openshift Cluster. One can achieve that by going to `Openshift Cluster-->Storage-->StorageClasses-->Create storageClass`. Please select _Edit YAML_ option and paste the following: 
+
+```
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: standard
+provisioner: kubevirt.io.hostpath-provisioner
+parameters:
+  storagePool: local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+
+```
+  After saving, this will create the required storage class.
 
 ##### Deploy nifikop
 
