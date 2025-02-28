@@ -217,6 +217,12 @@ volumeBindingMode: WaitForFirstConsumer
 helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=nifi-cluster-demo --version 1.12.0 --set image.tag=v1.12.0-release --set resources.requests.memory=10Mi --set resources.requests.cpu=10m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set namespaces='{"nifi-cluster-demo"}' --set runAsUser=1000650000
 ```
 
+- Listing deployed charts
+`helm list`
+
+- Get Status for the helm deployment
+`helm status nifikop`
+
 #### Deploy Nifi Cluster
 
 //TODO...
