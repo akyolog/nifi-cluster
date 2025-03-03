@@ -7,7 +7,8 @@ spec:
     headlessEnabled: true
     labels:
       cluster-name: nifidemo
-  zkAddress: "zookeeper.zookeeper:2181"
+  clusterManager: zookeeper
+  zkAddress: "zookeeper-0.zookeeper-headless.nifi-cluster-demo.svc.cluster.local:2181"
   zkPath: /nifidemo
   externalServices:
     - metadata:
@@ -20,7 +21,7 @@ spec:
             port: 8080
         type: LoadBalancer
   clusterImage: "apache/nifi:2.2.0"
-  initContainerImage: 'bash:5.2.2'
+  initContainerImage: "bash:5.2.2"
   oneNifiNodePerNode: true
   readOnlyConfig:
     nifiProperties:
@@ -35,10 +36,11 @@ spec:
       fsGroup: 1000650000 # set an gid in your namespace range
       imagePullPolicy: IfNotPresent
       isNode: true
-      serviceAccountName: default
+      serviceAccountName: nifikop
       storageConfigs:
         - mountPath: "/opt/nifi/nifi-current/logs"
           name: logs
+          reclaimPolicy: Delete
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -48,10 +50,10 @@ spec:
                 storage: 10Gi
       resourcesRequirements:
         limits:
-          cpu: "0.5"
+          cpu: "1"
           memory: 2Gi
         requests:
-          cpu: "0.5"
+          cpu: "1"
           memory: 2Gi
   nodes:
     - id: 1

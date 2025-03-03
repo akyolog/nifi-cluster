@@ -187,6 +187,56 @@ helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=n
 
 //TODO...
 
+## Problems & Solutions
+
+**Error:**
+```
+Insufficient memory. preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.
+
+
+-> crc status
+CRC VM:          Running
+OpenShift:       Running (v4.17.10)
+RAM Usage:       24.57GB of 32.68GB
+Disk Usage:      7.699GB of 10.96GB (Inside the CRC VM)
+Cache Usage:     28.35GB
+```
+
+Solution: CRC (Openshift Local) plattform on windows consumes high memory. For Nifi Cluster stack is unfortunately more memory needed. That why we switch to an on promise plafform with more capacities. On local machine it is not practicable.
+
+**Error:**
+```
+pods "nifikop-794cf5875c-" is forbidden: unable to validate against any security context constraint: [provider "anyuid": Forbidden: not usable by user or serviceaccount, provider restricted-v2: .containers[0].runAsUser: Invalid value: 1000: must be in the ranges: [1000680000, 1000689999], provider "restricted": Forbidden: not usable by user or serviceaccount, provider "nonroot-v2": Forbidden: not usable by user or serviceaccount, provider "nonroot": Forbidden: not usable by user or serviceaccount, provider "hostmount-anyuid": Forbidden: not usable by user or serviceaccount, provider "machine-api-termination-handler": Forbidden: not usable by user or serviceaccount, provider "hostnetwork-v2": Forbidden: not usable by user or serviceaccount, provider "hostnetwork": Forbidden: not usable by user or serviceaccount, provider "hostaccess": Forbidden: not usable by user or serviceaccount, provider "hostpath-provisioner": Forbidden: not usable by user or serviceaccount, provider "privileged": Forbidden: not usable by user or serviceaccount]
+```
+
+**Error:**
+```
+{"level":"error","time":"2025-02-28T09:19:34.220Z","caller":"controller/controller.go:329","msg":"Reconciler error","controller":"nificluster","controllerGroup":"nifi.konpyutaika.com","controllerKind":"NifiCluster","nifiCluster":{"name":"nifidemo","namespace":"nifi-cluster-demo"},"namespace":"nifi-cluster-demo","name":"nifidemo","reconcileID":"b08ce287-194b-4ad9-b7cf-eb59f963e149","error":"failed to reconcile resource: creating resource failed: services \"nifidemo-all-node\" is forbidden: cannot set blockOwnerDeletion if an ownerReference refers to a resource you can't set finalizers on: , <nil>","errorVerbose":"creating resource failed: services \"nifidemo-all-node\" is forbidden: cannot set blockOwnerDeletion if an ownerReference refers to a resource you can't set finalizers on: , <nil>\nfailed to reconcile resource\ngithub.com/konpyutaika/nifikop/pkg/resources/nifi.(*Reconciler).Reconcile\n\t/workspace/pkg/resources/nifi/nifi.go:132\ngithub.com/konpyutaika/nifikop/internal/controller.(*NifiClusterReconciler).Reconcile\n\t/workspace/internal/controller/nificluster_controller.go:148\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:119\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:316\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:266\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:227\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1700","stacktrace":"sigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:329\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:266\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.17.0/pkg/internal/controller/controller.go:227"}
+```
+
+
+Solution: Missing resources in Nifikop Role.Please add the following resources to this api group.
+
+```
+  - verbs:
+      - get
+      - update
+      - patch
+    apiGroups:
+      - nifi.konpyutaika.com
+    resources:
+      - nifiusers/finalizers
+      - nifiusergroups/finalizers
+      - nificlusters/finalizers
+      - nifidataflows/finalizers
+      - nifiregistryclients/finalizers
+      - nifiparametercontexts/finalizers
+      - nifinodegroupautoscalers/finalizers
+      - nificonnections/finalizers
+
+```
+
+![Missing Role](./doc/images/missing_resources_role.png)
 
 ## Comparision of operators
 
