@@ -158,7 +158,14 @@ This guide descripts the installtion steps on windows.
 ```
   & crc oc-env | Invoke-Expression
   oc login -u kubeadmin -p cktiF-....-txr9u https://api.crc.testing:6443
+
+  On the server:
+  oc login -u username -p password https://address-of-the-remote-server/
+
 ```
+
+Please note that in the above _oc login_ command, please replace the _username, password and address-of-the-remote-server_ with the corresponding values if you are connecting to the comapny specific openshift cluster.
+
 
   - Get Uid from openshift project
 
