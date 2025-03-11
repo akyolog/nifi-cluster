@@ -251,8 +251,12 @@ https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_dep
 
 In our case, we are using `csi-vmware-block` in our on premise location.
 
-##### State management
-https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#state-management
+##### Enabling Kubernetes State Management
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#enabling-kubernetes-state-management
+
+When using native Kubernetes State Management from NiFi, you need to make sure that the ServiceAccount used by NiFi has the correct rights to manage the needed Kubernetes resources. 
+
+In our case, we have created two roles: `nifikop` and `cert-manager-webhook:dynamic-serving`. They both exist in _test-jav-playground_ namespace and they both are connected to the role binding `nifikop` which also exist in _test-jav-playground_ namespace.
 
 
 
