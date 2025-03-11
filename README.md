@@ -236,6 +236,19 @@ This will install nifikop as a helm chart. In caseone still has problems executi
 
 #### Deploy Nifi Cluster
 
+//TODO...
+
+
+...
+
+## Comparision of operators
+
+Comparision criterieas
+
+- Support for Apache Nifi 2.x
+- Performance
+- Installation comfortable & reliable
+- Configuration comfortable & reliable
 
 
 
@@ -355,16 +368,3 @@ roleRef:
 
 
 
-//TODO...
-
-
-...
-
-## Comparision of operators
-
-Comparision criterieas
-
-- Support for Apache Nifi 2.x
-- Performance
-- Installation comfortable & reliable
-- Configuration comfortable & reliable
