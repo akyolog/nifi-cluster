@@ -229,7 +229,15 @@ helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=t
 This will install nifikop as a helm chart. In caseone still has problems executing the above command, one can edit the deployment using the command `oc edit deployment.apps/nifikop`.
 
 - Listing deployed charts
-`helm list`
+`helm list -all`
+
+```
+NAME            NAMESPACE               REVISION        UPDATED     STATUS          CHART                   APP VERSION
+cert-manager    test-java-playground    1               2025-03-10  deployed        cert-manager-v1.7.2     v1.7.2
+nifikop         test-java-playground    1               2025-03-10  deployed        nifikop-1.12.0          1.12.0-release
+zookeeper       test-java-playground    1               2025-03-10  deployed        zookeeper-13.7.4        3.9.3
+```
+
 
 - Get Status for the helm deployment
 `helm status nifikop`
