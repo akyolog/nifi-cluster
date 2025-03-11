@@ -242,6 +242,8 @@ zookeeper       test-java-playground    1               2025-03-10  deployed    
 - Get Status for the helm deployment
 `helm status nifikop`
 
+Further checking of the nifikop can be achieved via using the command: `kubectl --namespace test-java-playground get pods -l "release=nifikop"`.
+
 #### Deploy Nifi Cluster
 
 //TODO...
