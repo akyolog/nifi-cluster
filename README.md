@@ -197,7 +197,7 @@ helm install cert-manager --namespace nifi-cluster-demo --version v1.7.2 jetstac
 ##### Install State management / zookeeper
 
 ```
-helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000 --set namespaceOverride=test-java-playground
+helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=csi-vmware-block --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000 --set namespaceOverride=test-java-playground
 ```
 
 Since we are installing the zookeeper in the namespace _test-java-playground_, the additional flag of **namespaceOverride=test-java-playground** is given at the end of zookeeper command.
@@ -250,6 +250,14 @@ Further checking of the nifikop can be achieved via using the command: `kubectl 
 https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#create-custom-storage-class
 
 In our case, we are using `csi-vmware-block` in our on premise location.
+
+##### State management
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#state-management
+
+
+
+
+
 
 
 //TODO...
