@@ -197,10 +197,12 @@ helm install cert-manager --namespace nifi-cluster-demo --version v1.7.2 jetstac
 ##### Install State management / zookeeper
 
 ```
-helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000
+helm install zookeeper oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=standard --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000 --set namespaceOverride=test-java-playground
 ```
 
-- What to do in case Zookeeper is not running correctly?
+Since we are installing the zookeeper in the namespace _test-java-playground_, the additional flag of **namespaceOverride=test-java-playground** is given at the end of zookeeper command.
+
+- What to do in case Zookeeper is not running correctly?(Only applies when we are doing local installation)
 
   In case Zookeeper is not running correctly, one needs to create a new StorageClass in Openshift Cluster. One can achieve that by going to `Openshift Cluster-->Storage-->StorageClasses-->Create storageClass`. Please select _Edit YAML_ option and paste the following: 
 
@@ -221,8 +223,10 @@ volumeBindingMode: WaitForFirstConsumer
 ##### Deploy nifikop
 
 ```
-helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=nifi-cluster-demo --version 1.12.0 --set image.tag=v1.12.0-release --set resources.requests.memory=10Mi --set resources.requests.cpu=10m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set namespaces='{"nifi-cluster-demo"}' --set runAsUser=1000650000
+helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=test-java-playground --version 1.12.0 --set image.tag=v1.12.0-release --set resources.requests.memory=10Mi --set resources.requests.cpu=10m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set namespaces='{"test-java-playground"}' --set runAsUser=1001270000
 ```
+
+This will install nifikop as a helm chart. In caseone still has problems executing the above command, one can edit the deployment using the command `oc edit deployment.apps/nifikop`.
 
 - Listing deployed charts
 `helm list`
