@@ -236,6 +236,14 @@ This will install nifikop as a helm chart. In caseone still has problems executi
 
 #### Deploy Nifi Cluster
 
+
+
+
+### Archived
+
+Everything below this line is only for historical purposes. It is not part of the official documentation and it will be eventually deleted.
+-------------------------------------------------------------------
+
 ###### Create custom storage class
 https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#create-custom-storage-class
 
