@@ -160,11 +160,11 @@ This guide descripts the installtion steps on windows.
   oc login -u kubeadmin -p cktiF-....-txr9u https://api.crc.testing:6443
 
   On the server:
-  oc login -u username -p password https://address-of-the-remote-server/
+  oc login --token=token-information --server=https://name-of-the-server:6443
 
 ```
 
-Please note that in the above _oc login_ command, please replace the _username, password and address-of-the-remote-server_ with the corresponding values if you are connecting to the comapny specific openshift cluster.
+In order to connect to the server, one can obtain the command by clicking on the drop down of the logged in user on the top right in the Redhat openshift on-prem server and then selecting **Copy login command**. 
 
 
   - Get Uid from openshift project
