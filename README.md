@@ -244,7 +244,13 @@ zookeeper       test-java-playground    1               2025-03-10  deployed    
 
 Further checking of the nifikop can be achieved via using the command: `kubectl --namespace test-java-playground get pods -l "release=nifikop"`.
 
-#### Deploy Nifi Cluster
+#### Manage Nifi Cluster
+##### Create custom storage class
+
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#create-custom-storage-class
+
+In our case, we are using `csi-vmware-block` in our on premise location.
+
 
 //TODO...
 
