@@ -226,7 +226,7 @@ volumeBindingMode: WaitForFirstConsumer
 helm install nifikop oci://ghcr.io/konpyutaika/helm-charts/nifikop --namespace=test-java-playground --version 1.12.0 --set image.tag=v1.12.0-release --set resources.requests.memory=10Mi --set resources.requests.cpu=10m --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set namespaces='{"test-java-playground"}' --set runAsUser=1001270000
 ```
 
-This will install nifikop as a helm chart. In caseone still has problems executing the above command, one can edit the deployment using the command `oc edit deployment.apps/nifikop`.
+This will install nifikop as a helm chart. In case one still has problems executing the above command, one can edit the deployment using the command `oc edit deployment.apps/nifikop`.
 
 - Listing deployed charts
 `helm list -all`
@@ -256,14 +256,24 @@ https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_dep
 
 When using native Kubernetes State Management from NiFi, you need to make sure that the ServiceAccount used by NiFi has the correct rights to manage the needed Kubernetes resources. 
 
-In our case, we have created two roles: `nifikop` and `cert-manager-webhook:dynamic-serving`. They both exist in _test-jav-playground_ namespace and they both are connected to the role binding `nifikop` which also exist in _test-jav-playground_ namespace.
+In our case, we have created two roles: `nifikop` and `cert-manager-webhook:dynamic-serving`. They both exist in _test-java-playground_ namespace and they both are connected to the role binding `nifikop` which also exist in _test-java-playground_ namespace.
+
+##### Deploy NiFi cluster
+
+https://konpyutaika.github.io/nifikop/docs/3_manage_nifi/1_manage_clusters/1_deploy_cluster/1_quick_start#deploy-nifi-cluster
+
+kubectl create -n test-java-playground -f config/samples/simplenificluster.yaml
 
 
 
+$ uid=$(kubectl get namespace test-java-playground -o=jsonpath='{.metadata.annotations.openshift\.io/sa\.scc\.supplemental-groups}' | sed 's/\/10000$//' | tr -d '[:space:]')
+
+sed -i "s/1000650000/$uid/g" config/samples/openshift.yaml
+
+kubectl create -n test-java-playground -f https://github.com/akyolog/nifi-cluster/blob/main/nifikop/config/openshift.yaml
 
 
-
-
+kubectl create -n test-java-playground -f C:/ImportantDownloads/codeprojects/nifi/nifi-cluster/nifikop/config/openshift.yaml
 //TODO...
 
 
@@ -396,3 +406,57 @@ roleRef:
 
 
 
+
+ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
+
+    zookeeper.test-java-playground.svc.cluster.local
+
+To connect to your ZooKeeper server run the following commands:
+
+    export POD_NAME=$(kubectl get pods --namespace test-java-playground -l "app.kubernetes.io/name=zookeeper,app.kubernetes.io/instance=zookeeper,app.kubernetes.io/component=zookeeper" -o jsonpath="{.items[0].metadata.name}")
+    kubectl exec -it $POD_NAME -- zkCli.sh
+
+To connect to your ZooKeeper server from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace test-java-playground svc/zookeeper 2181:2181 &
+    zkCli.sh 127.0.0.1:2181
+
+WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
+  - tls.resources
++info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+----------------------------------------------------
+$ helm install simple-zk oci://registry-1.docker.io/bitnamicharts/zookeeper --set resources.requests.memory=10Mi --set resources.requests.cpu=10m     --set resources.limits.memory=256Mi --set resources.limits.cpu=250m --set global.storageClass=csi-vmware-block --set networkPolicy.enabled=true --set replicaCount=3 --set containerSecurityContext.runAsUser=1000650000 --set podSecurityContext.fsGroup=1000650000 --set namespaceOverride=test-java-playground
+Pulled: registry-1.docker.io/bitnamicharts/zookeeper:13.7.4
+Digest: sha256:7b6aef19b1af10de823c3c0ca2ff0465fcc5db5c5e2c15b2ca1a207783688f99
+NAME: simple-zk
+LAST DEPLOYED: Wed Mar 19 10:23:00 2025
+NAMESPACE: test-java-playground
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: zookeeper
+CHART VERSION: 13.7.4
+APP VERSION: 3.9.3
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
+
+    simple-zk-zookeeper.test-java-playground.svc.cluster.local
+
+To connect to your ZooKeeper server run the following commands:
+
+    export POD_NAME=$(kubectl get pods --namespace test-java-playground -l "app.kubernetes.io/name=zookeeper,app.kubernetes.io/instance=simple-zk,app.kubernetes.io/component=zookeeper" -o jsonpath="{.items[0].metadata.name}")
+    kubectl exec -it $POD_NAME -- zkCli.sh
+
+To connect to your ZooKeeper server from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace test-java-playground svc/simple-zk-zookeeper 2181:2181 &
+    zkCli.sh 127.0.0.1:2181
+
+WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
+  - tls.resources
++info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
