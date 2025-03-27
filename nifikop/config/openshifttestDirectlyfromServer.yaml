@@ -1,117 +1,27 @@
 apiVersion: nifi.konpyutaika.com/v1
 kind: NifiCluster
 metadata:
-  creationTimestamp: '2025-03-20T08:36:08Z'
-  generation: 7
-  managedFields:
-    - apiVersion: nifi.konpyutaika.com/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:spec':
-          'f:service':
-            .: {}
-            'f:headlessEnabled': {}
-            'f:labels':
-              .: {}
-              'f:cluster-name': {}
-          'f:clusterManager': {}
-          'f:nifiClusterTaskSpec':
-            .: {}
-            'f:retryDurationMinutes': {}
-          'f:zkPath': {}
-          'f:nodeConfigGroups':
-            .: {}
-            'f:default_group':
-              .: {}
-              'f:fsGroup': {}
-              'f:imagePullPolicy': {}
-              'f:isNode': {}
-              'f:resourcesRequirements':
-                .: {}
-                'f:limits':
-                  .: {}
-                  'f:cpu': {}
-                  'f:memory': {}
-                'f:requests':
-                  .: {}
-                  'f:cpu': {}
-                  'f:memory': {}
-              'f:runAsUser': {}
-              'f:serviceAccountName': {}
-              'f:storageConfigs': {}
-          'f:oneNifiNodePerNode': {}
-          'f:listenersConfig':
-            .: {}
-            'f:internalListeners': {}
-          .: {}
-          'f:zkAddress': {}
-          'f:pod':
-            .: {}
-            'f:labels':
-              .: {}
-              'f:cluster-name': {}
-          'f:propagateLabels': {}
-          'f:clusterImage': {}
-          'f:readOnlyConfig':
-            .: {}
-            'f:nifiProperties':
-              .: {}
-              'f:overrideConfigs': {}
-          'f:externalServices': {}
-          'f:nodes': {}
-          'f:initContainerImage': {}
-      manager: Mozilla
-      operation: Update
-      time: '2025-03-20T09:38:40Z'
-    - apiVersion: nifi.konpyutaika.com/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status':
-          .: {}
-          'f:nodesState':
-            .: {}
-            'f:1':
-              .: {}
-              'f:configurationState': {}
-              'f:creationTime': {}
-              'f:gracefulActionState':
-                .: {}
-                'f:TaskStarted': {}
-                'f:actionState': {}
-                'f:actionStep': {}
-                'f:errorMessage': {}
-              'f:initClusterNode': {}
-              'f:lastUpdatedTime': {}
-              'f:podIsReady': {}
-            'f:2':
-              .: {}
-              'f:configurationState': {}
-              'f:creationTime': {}
-              'f:gracefulActionState':
-                .: {}
-                'f:actionState': {}
-                'f:errorMessage': {}
-              'f:initClusterNode': {}
-              'f:lastUpdatedTime': {}
-              'f:podIsReady': {}
-          'f:prometheusReportingTask':
-            .: {}
-            'f:id': {}
-            'f:version': {}
-          'f:rollingUpgradeStatus':
-            .: {}
-            'f:errorCount': {}
-            'f:lastSuccess': {}
-          'f:state': {}
-      manager: manager
-      operation: Update
-      subresource: status
-      time: '2025-03-20T10:07:08Z'
+  creationTimestamp: '2025-03-21T13:39:56Z'
+  generation: 9
   name: nifidemo
   namespace: test-java-playground
-  resourceVersion: '3731956145'
-  uid: e912d6ed-9c01-4e5f-8b99-996f6fb53bd4
+  resourceVersion: '3751107075'
+  uid: bf57df6e-bdff-4328-8b8b-6a715bb8f52e
 spec:
+  clusterImage: 'apache/nifi:2.3.0'
+  clusterManager: zookeeper
+  externalServices:
+    - metadata:
+        labels:
+          cluster-name: driver-nifidemo
+      name: driver-ip
+      spec:
+        portConfigs:
+          - internalListenerName: http
+            port: 8081
+            protocol: TCP
+        type: LoadBalancer
+  initContainerImage: 'bash:5.2.2'
   listenersConfig:
     internalListeners:
       - containerPort: 8081
@@ -134,39 +44,8 @@ spec:
         name: load-balance
         protocol: TCP
         type: load-balance
-  clusterImage: 'apache/nifi:2.3.0'
-  zkAddress: 'zookeeper.test-java-playground.svc.cluster.local:2181'
-  readOnlyConfig:
-    nifiProperties:
-      overrideConfigs: |
-        nifi.sensitive.props.key=thisIsABadSensitiveKeyPassword
-  pod:
-    labels:
-      cluster-name: nifidemo
-  propagateLabels: true
-  externalServices:
-    - metadata:
-        labels:
-          cluster-name: driver-nifidemo
-      name: driver-ip
-      spec:
-        portConfigs:
-          - internalListenerName: http
-            port: 8081
-            protocol: TCP
-        type: LoadBalancer
-  initContainerImage: 'bash:5.2.2'
-  nodes:
-    - id: 1
-      nodeConfigGroup: default_group
-    - id: 2
-      nodeConfigGroup: default_group
-  clusterManager: zookeeper
-  service:
-    headlessEnabled: true
-    labels:
-      cluster-name: nifidemo
-  zkPath: /nifidemo
+  nifiClusterTaskSpec:
+    retryDurationMinutes: 10
   nodeConfigGroups:
     default_group:
       fsGroup: 1001270000
@@ -192,14 +71,13 @@ spec:
                 storage: 10Gi
             storageClassName: csi-vmware-block
           reclaimPolicy: Delete
-        - mountPath: /opt/nifi/data
+        - metadata:
+            annotations:
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/data
           name: data
-          reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
-            annotations:
-              my-annotation: my-value
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -207,14 +85,14 @@ spec:
               requests:
                 storage: 5Gi
             storageClassName: csi-vmware-block
-        - mountPath: /opt/nifi/extensions
+          reclaimPolicy: Delete
+        - metadata:
+            annotations:
+              my-annotation: my-value
+            labels:
+              my-label: my-value
+          mountPath: /opt/nifi/extensions
           name: extensions-repository
-          reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
-            annotations:
-              my-annotation: my-value
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -222,14 +100,14 @@ spec:
               requests:
                 storage: 5Gi
             storageClassName: csi-vmware-block
-        - mountPath: /opt/nifi/flowfile_repository
-          name: flowfile-repository
           reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
+        - metadata:
             annotations:
-              my-annotation: my-value
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/flowfile_repository
+          name: flowfile-repository
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -237,14 +115,14 @@ spec:
               requests:
                 storage: 10Gi
             storageClassName: csi-vmware-block
-        - mountPath: /opt/nifi/nifi-current/conf
+          reclaimPolicy: Delete
+        - metadata:
+            annotations:
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/nifi-current/conf
           name: conf
-          reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
-            annotations:
-              my-annotation: my-value
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -252,14 +130,29 @@ spec:
               requests:
                 storage: 5Gi
             storageClassName: csi-vmware-block
-        - mountPath: /opt/nifi/content_repository
+          reclaimPolicy: Delete
+        - metadata:
+            annotations:
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/nifi-current/bin
+          name: bin
+          pvcSpec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5Gi
+            storageClassName: csi-vmware-block
+          reclaimPolicy: Delete
+        - metadata:
+            annotations:
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/content_repository
           name: content-repository
-          reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
-            annotations:
-              my-annotation: my-value
           pvcSpec:
             accessModes:
               - ReadWriteOnce
@@ -267,44 +160,62 @@ spec:
               requests:
                 storage: 5Gi
             storageClassName: csi-vmware-block
-        - mountPath: /opt/nifi/provenance_repository
-          name: provenance-repository
           reclaimPolicy: Delete
-          metadata:
-            labels:
-              my-label: my-value
+        - metadata:
             annotations:
-              my-annotation: my-value
+              my-annotation: nifidemo
+            labels:
+              my-label: nifidemo
+          mountPath: /opt/nifi/provenance_repository
+          name: provenance-repository
           pvcSpec:
             accessModes:
               - ReadWriteOnce
             resources:
               requests:
                 storage: 5Gi
+          reclaimPolicy: Delete
+  nodes:
+    - id: 1
+      nodeConfigGroup: default_group
+    - id: 2
+      nodeConfigGroup: default_group
   oneNifiNodePerNode: true
-  nifiClusterTaskSpec:
-    retryDurationMinutes: 10
+  pod:
+    labels:
+      cluster-name: nifidemo
+  propagateLabels: true
+  readOnlyConfig:
+    nifiProperties:
+      overrideConfigs: |
+        nifi.sensitive.props.key=thisIsABadSensitiveKeyPassword
+  service:
+    headlessEnabled: true
+    labels:
+      cluster-name: nifidemo
+  zkAddress: 'zookeeper.test-java-playground.svc.cluster.local:2181'
+  zkPath: /nifidemo
 status:
   nodesState:
     '1':
       configurationState: ConfigInSync
-      creationTime: '2025-03-20T08:44:30Z'
-      gracefulActionState:
-        TaskStarted: 'Thu, 20 Mar 2025 10:07:04 GMT'
-        actionState: GracefulUpscaleRunning
-        actionStep: CONNECTING
-        errorMessage: ''
-      initClusterNode: true
-      lastUpdatedTime: '2025-03-20T10:07:04Z'
-      podIsReady: false
-    '2':
-      configurationState: ConfigInSync
-      creationTime: '2025-03-20T08:44:30Z'
+      creationTime: '2025-03-21T13:39:56Z'
       gracefulActionState:
         actionState: GracefulUpscaleRequired
         errorMessage: ''
       initClusterNode: true
-      lastUpdatedTime: '2025-03-20T10:07:08Z'
+      lastUpdatedTime: '2025-03-27T09:56:46Z'
+      podIsReady: false
+    '2':
+      configurationState: ConfigInSync
+      creationTime: '2025-03-21T13:39:56Z'
+      gracefulActionState:
+        TaskStarted: 'Thu, 27 Mar 2025 09:38:02 GMT'
+        actionState: GracefulUpscaleRunning
+        actionStep: CONNECTING
+        errorMessage: ''
+      initClusterNode: true
+      lastUpdatedTime: '2025-03-27T09:38:02Z'
       podIsReady: false
   prometheusReportingTask:
     id: ''
