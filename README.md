@@ -314,7 +314,7 @@ I have attached the pods created, the event stream and the bash error in `podwit
 
 #### Next steps
 
-In my opinion, the shell access denial is _probably_ the last hurdle which is hindering successful launch of Apache Nifi. Once this access problem is resolved, hopefully the Nifi Cluster will be up and running and ready for configuration.
+In my opinion, the shell access denial is _probably_ the last hurdle which is hindering the successful launch of Apache Nifi. Once this access problem is resolved, hopefully the Nifi Cluster will be up and running and ready for configuration.
 
 
 
@@ -328,7 +328,7 @@ Comparision criterieas
 
 - Support for Apache Nifi 2.x --> Open
 - Performance --> Open
-- Installation comfortable & reliable --> Open but the installation guide is not reliable to follwo as one needs to do a lot of additional resaerch/google research in order to get the cluster up and running.
+- Installation comfortable & reliable --> Open but the installation guide is not reliable to follow as one needs to do a lot of additional resaerch/google research in order to get the cluster up and running.
 - Configuration comfortable & reliable --> Open
 
 
