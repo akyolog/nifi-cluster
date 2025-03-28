@@ -274,7 +274,50 @@ kubectl create -n test-java-playground -f https://github.com/akyolog/nifi-cluste
 
 
 kubectl create -n test-java-playground -f C:/ImportantDownloads/codeprojects/nifi/nifi-cluster/nifikop/config/openshift.yaml
-//TODO...
+
+In the project, one can find the following files:
+
+```
+- openshift.yaml: This is the original file which was used in the beginning to create NifiCluster cluster. 
+
+- openshifttest.yaml: Due to the problems in setting the cluster using openshift.yaml, it was enhanced to openshifttest.yaml. 
+
+- openshifttestDirectlyfromServer.yaml: Since the cluster was still working correctly, several changes were applied directly on the server( for example, storageConfigs and so on), all of which is recorded in this yaml.
+```
+
+During implementing changes in openshifttestDirectlyfromServer.yaml, it was detected that Persistance Volume Claims were not working correctly and throwing the following error:
+
+```
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/bootstrap.conf': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/bootstrap-notification-services.xml': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/logback.xml': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/login-identity-providers.xml': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/nifi.properties': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/state-management.xml': Permission denied
+cp: cannot create regular file '/opt/nifi/nifi-current/conf/zookeeper.properties': Permission denied
+```
+
+This is fixed by creating VolumeSnapshots for each pvc. After this, this error vanishes.
+
+This current situation is as follows:
+- Pods are able to connect to Zookeeper.
+- Pods are unable to execute `nifi.sh` and throw the following error:
+
+`bash: line 41: /opt/nifi/nifi-current/bin/nifi.sh: Permission denied`
+
+If one chooses Events stream, one would find the following error:
+```
+AttachVolume.Attach failed for volume "pvc-770e31c0-6a66-4f31-ac2a-d0db518386ed" : rpc error: code = Internal desc = failed to attach disk: "c03c063d-dfc2-4047-b84f-1ceafd62a729" with node: "42346302-6a08-aaa4-baae-e0b0f8357785" err ServerFaultCode: CNS: Failed to retrieve datastore for vol c03c063d-dfc2-4047-b84f-1ceafd62a729. (vim.fault.NotFound) { faultCause = (vmodl.MethodFault) null, faultMessage = <unset> msg = "The vStorageObject (vim.vslm.ID) { dynamicType = null, dynamicProperty = null, id = c03c063d-dfc2-4047-b84f-1ceafd62a729 } was not found" }
+```
+
+I have attached the pods created, the event stream and the bash error in `podwitherroraftervolumesnapshotsarecreated.groovy` which one can view for more information.
+
+#### Next steps
+
+In my opinion, the shell access denial is _probably_ the last hurdle which is hindering successful launch of Apache Nifi. Once this access problem is resolved, hopefully the Nifi Cluster will be up and running and ready for configuration.
+
+
+
 
 
 ...
@@ -283,14 +326,14 @@ kubectl create -n test-java-playground -f C:/ImportantDownloads/codeprojects/nif
 
 Comparision criterieas
 
-- Support for Apache Nifi 2.x
-- Performance
-- Installation comfortable & reliable
-- Configuration comfortable & reliable
+- Support for Apache Nifi 2.x --> Open
+- Performance --> Open
+- Installation comfortable & reliable --> Open but the installation guide is not reliable to follwo as one needs to do a lot of additional resaerch/google research in order to get the cluster up and running.
+- Configuration comfortable & reliable --> Open
 
 
 
-### Archived
+## Archived
 
 Everything below this line is only for historical purposes. It is not part of the official documentation and it will be eventually deleted.
 -------------------------------------------------------------------
